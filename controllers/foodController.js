@@ -3,13 +3,11 @@ import fs from 'fs'
 
 // Add food item
 const addFood = async (req, res) => {
-    // if (!req.file) {
-    //     return res.status(400).json({ success: false, message: 'Image file is required.' });
-    // }
+    if (!req.file) {
+        return res.status(400).json({ success: false, message: 'Image file is required.' });
+    }
 
-    // const image_filename = req.file.filename;
-
-    const image_filename = req.file ? req.file.filename : 'default.jpg';
+    const image_filename = req.file.filename;
 
     const food = new foodModel({
         name: req.body.name,
@@ -28,4 +26,15 @@ const addFood = async (req, res) => {
     }
 };
 
-export {addFood}
+// List All Foods
+const listFood = async(req, res) => {
+    try {
+        const foods = await foodModel.find({});
+        res.json({success: true, data: foods})
+    } catch (error) {
+        console.log(error)
+        res.json({success: false, message: "Error fetching all items!"})
+    }
+}
+
+export {addFood, listFood}
