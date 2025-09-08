@@ -1,5 +1,7 @@
+import foodModel from "../models/foodModel.js";
 import orderModel from "../models/orderModel.js";
 import userModel from "../models/userModel.js";
+import categoryModel from "../models/categoryModel.js";
 import Stripe from "stripe"
 
 const stripe = new Stripe(process.env.STRIPE_SECRET_KEY)
@@ -104,5 +106,36 @@ const updateStatus = async (req, res) => {
     }
 }
 
+const getAdminStats = async (req, res) => {
+  try {
+    const totalOrders = await orderModel.countDocuments();
+    const totalFoods = await foodModel.countDocuments();
+    const totalCategories = await categoryModel.countDocuments();
 
-export {placeOrder, verifyOrder, userOrders, listOrders, updateStatus}
+    const allOrders = await orderModel.find();
+
+    const totalRevenue = allOrders
+      .filter(order => order.status === "Delivered")
+      .reduce((acc, order) => acc + (order.amount || 0), 0);
+
+    return res.status(200).json({
+      success: true,
+      data: {
+        totalOrders,        
+        totalFoods,
+        totalCategories,
+        totalRevenue,      
+      },
+    });
+  } catch (error) {
+    console.error("Error fetching stats:", error);
+    return res.status(500).json({
+      success: false,
+      message: "Failed to fetch admin stats",
+    });
+  }
+};
+
+
+
+export {placeOrder, verifyOrder, userOrders, listOrders, updateStatus, getAdminStats}
