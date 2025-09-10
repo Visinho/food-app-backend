@@ -20,7 +20,14 @@ const foodSchema = new mongoose.Schema({
   category: {
     type: String,
     required: true
-  }
+  }, availableFrom: {
+        type: String, 
+        required: true
+    },
+    availableTo: {
+        type: String, 
+        required: true
+    }
 });
 
 const foodModel = mongoose.models.food || mongoose.model("food", foodSchema)
