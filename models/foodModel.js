@@ -7,29 +7,30 @@ const foodSchema = new mongoose.Schema({
   },
   description: {
     type: String,
-    required: true
+    required: true,
   },
   price: {
     type: Number,
-    required: true
+    required: true,
   },
   image: {
     type: String,
-    required: true
+    required: true,
   },
   category: {
     type: String,
-    required: true
-  }, availableFrom: {
-        type: String, 
-        required: true
-    },
-    availableTo: {
-        type: String, 
-        required: true
-    }
+    required: true,
+  },
+  availableFrom: {
+    type: String,
+    required: true,
+  },
+  availableTo: {
+    type: String,
+    required: true,
+  },
 });
 
-const foodModel = mongoose.models.food || mongoose.model("food", foodSchema)
+const foodModel = mongoose.models.food || mongoose.model("food", foodSchema);
 
 export default foodModel;
